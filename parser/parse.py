@@ -10,15 +10,19 @@ load_dotenv()
 pdf_dir = Path(os.getenv("PDF_PATH"))
 
 # HELPER FUNCTIONS
-def find_THE_lines(text, character="Chandler", prior_amount = 3):
-    "Returns pairs"
+def find_THE_lines(text, character="Chandler", prior_amount=3):
+    "Returns pairs of context and response as flat dictionaries"
     pairs = []
     text_lines = text.split("\n")
     for i in range(len(text_lines)):
         if text_lines[i].startswith(f"{character}: "):
-            character_line = text_lines[i]
-            prior_lines = [text_lines[i-prior] for prior in range(prior_amount,0, -1) if i-prior >=0]
-            pairs.append(({"prior": prior_lines}, {"character_line":character_line}))
+            start_idx = max(0, i - prior_amount)
+            prior_context = " ".join([line.strip() for line in text_lines[start_idx:i]])
+            entry = {
+                "context": prior_context,
+                "response": text_lines[i].replace(f"{character}:", "").strip()
+            }
+            pairs.append(entry)
     return pairs
 
 # PUBLIC FUNCTIONS

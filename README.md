@@ -12,97 +12,42 @@ A dataset of Chandler Bing's dialogue lines from the TV show "Friends" (all 10 s
 
 ## Data Format
 
-Each line in `ChandlerBINGLines.jsonl` is a JSON array containing two objects:
+Each line in `ChandlerBINGLines.jsonl` is a flat JSON object:
 
 ```json
-[
-  {"prior": ["line1", "line2", "line3"]},
-  {"character_line": "Chandler: <his response>"}
-]
+{"context": "Prior dialogue joined as a single string", "response": "Chandler's response"}
 ```
 
 | Field | Description |
 |-------|-------------|
-| `prior` | Array of up to 3 preceding dialogue lines (context) |
-| `character_line` | Chandler's response line |
+| `context` | Up to 3 preceding dialogue lines joined into a single string |
+| `response` | Chandler's response (without the "Chandler:" prefix) |
 
 ## Examples
 
 ### Example 1: Classic Chandler Sarcasm
 ```json
-[
-  {
-    "prior": [
-      "Monica: There's nothing to tell! He's just some guy I work with!",
-      "Joey: C'mon, you're going out with the guy! There's gotta be something wrong with him!"
-    ]
-  },
-  {
-    "character_line": "Chandler: All right Joey, be nice. So does he have a hump? A hump and a hairpiece?"
-  }
-]
+{"context": "Monica: There's nothing to tell! He's just some guy I work with! Joey: C'mon, you're going out with the guy! There's gotta be something wrong with him!", "response": "All right Joey, be nice. So does he have a hump? A hump and a hairpiece?"}
 ```
 
 ### Example 2: Deadpan Humor
 ```json
-[
-  {
-    "prior": [
-      "Monica: Are you okay, sweetie?",
-      "Ross: I just feel like someone reached down my throat, grabbed my small intestine, pulled it",
-      "out of my mouth and tied it around my neck..."
-    ]
-  },
-  {
-    "character_line": "Chandler: Cookie?"
-  }
-]
+{"context": "Monica: Are you okay, sweetie? Ross: I just feel like someone reached down my throat, grabbed my small intestine, pulled it out of my mouth and tied it around my neck...", "response": "Cookie?"}
 ```
 
 ### Example 3: Self-Deprecating Wit
 ```json
-[
-  {
-    "prior": [
-      "Joey: And you never knew she was a lesbian...",
-      "Ross: No!! Okay?! Why does everyone keep fixating on that? She didn't know, how should I",
-      "know?"
-    ]
-  },
-  {
-    "character_line": "Chandler: Sometimes I wish I was a lesbian... (They all stare at him.) Did I say that out loud?"
-  }
-]
+{"context": "Joey: And you never knew she was a lesbian... Ross: No!! Okay?! Why does everyone keep fixating on that? She didn't know, how should I know?", "response": "Sometimes I wish I was a lesbian... (They all stare at him.) Did I say that out loud?"}
 ```
 
 ### Example 4: Quick Comeback
 ```json
-[
-  {
-    "prior": [
-      "Joey: Strip joint! C'mon, you're single! Have some hormones!",
-      "Ross: I don't want to be single, okay? I just... I just- I just wanna be married again!",
-      "(Rachel enters in a wet wedding dress and starts to search the room.)"
-    ]
-  },
-  {
-    "character_line": "Chandler: And I just want a million dollars! (He extends his hand hopefully.)"
-  }
-]
+{"context": "Joey: Strip joint! C'mon, you're single! Have some hormones! Ross: I don't want to be single, okay? I just... I just- I just wanna be married again! (Rachel enters in a wet wedding dress and starts to search the room.)", "response": "And I just want a million dollars! (He extends his hand hopefully.)"}
 ```
 
 ### Example 5: Observational Humor
 ```json
-[
-  {
-    "prior": [
-      "Rachel: Isn't this amazing? I mean, I have never made coffee before in my entire life."
-    ]
-  },
-  {
-    "character_line": "Chandler: That is amazing."
-  }
-]
+{"context": "Rachel: Isn't this amazing? I mean, I have never made coffee before in my entire life.", "response": "That is amazing."}
 ```
 
 ## Usage
@@ -118,10 +63,10 @@ with open("ChandlerBINGLines.jsonl", "r", encoding="utf-8") as f:
 
 # Access individual entries
 for entry in data[:5]:
-    prior_context = entry[0]["prior"]
-    chandler_line = entry[1]["character_line"]
-    print(f"Context: {prior_context}")
-    print(f"Chandler: {chandler_line}\n")
+    context = entry["context"]
+    response = entry["response"]
+    print(f"Context: {context}")
+    print(f"Chandler: {response}\n")
 ```
 
 ### Regenerating the Dataset
